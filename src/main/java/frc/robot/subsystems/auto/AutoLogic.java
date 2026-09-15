@@ -1,0 +1,254 @@
+package frc.robot.subsystems.auto;
+
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.path.PathPlannerPath;
+import com.pathplanner.lib.util.FileVersionException;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
+import frc.robot.Subsystems;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import org.json.simple.parser.ParseException;
+
+public class AutoLogic {
+
+  private static Subsystems s;
+
+  /* ---------------- Start positions ---------------- */
+
+  public enum StartPosition {
+    LEFT_TRENCH(
+        "Left Trench", new Pose2d(4.013, 7.597, new Rotation2d(Units.degreesToRadians(90)))),
+    CENTER("Center", new Pose2d(3.600, 4.035, new Rotation2d(Units.degreesToRadians(0)))),
+    RIGHT_TRENCH(
+        "Right Trench", new Pose2d(4.013, 0.473, new Rotation2d(Units.degreesToRadians(-90)))),
+    MISC("Misc", null);
+
+    final String title;
+    final Pose2d startPose;
+
+    StartPosition(String title, Pose2d startPose) {
+      this.title = title;
+      this.startPose = startPose;
+    }
+  }
+
+  /* ---------------- Paths ---------------- */
+
+  private static AutoPath defaultPath;
+
+  private static List<AutoPath> rebuiltPaths = List.of();
+
+  private static Map<Integer, List<AutoPath>> commandsMap = Map.of();
+
+  private static final Map<String, AutoPath> namesToAuto = new HashMap<>();
+  private static boolean pathsInitialized = false;
+
+  /* ---------------- Choosers ---------------- */
+
+  private static final SendableChooser<StartPosition> startPositionChooser =
+      new SendableChooser<>();
+
+  private static final DynamicSendableChooser<String> availableAutos =
+      new DynamicSendableChooser<>();
+
+  private static final SendableChooser<Integer> gameObjects = new SendableChooser<>();
+
+  private static final NetworkTableEntry autoDelayEntry =
+      NetworkTableInstance.getDefault().getTable("Autos").getEntry("Auto Delay");
+
+  public static final String keys = "RB=Right Bump, LB=Left Bump, LT=Left Trench, RT=Right Trench";
+
+  public static List<AutoPath> getAutos() {
+    if (rebuiltPaths != null) {
+      return rebuiltPaths;
+    }
+
+    return List.of();
+  }
+
+  /* ---------------- Init ---------------- */
+  public static void init(Subsystems subsystems) {
+    s = subsystems;
+  }
+
+  // We always need to register commands BEFORE we initialize paths. This is
+  // because paths may reference commands or triggers that need to be registered
+  // first.
+  // This helper-method insures caller initializes these in the correct order.
+  public static void initCommandsAndPaths(boolean testMode) {
+    if (!testMode) {
+      registerCommands();
+    }
+
+    initPaths();
+  }
+
+  private static void initPaths() {
+    List<AutoPath> physicalRebuiltPaths;
+
+    if (pathsInitialized) {
+      return;
+    }
+
+    defaultPath = new AutoPath("Default", "Default");
+
+    physicalRebuiltPaths =
+        List.of(
+            new AutoPath("C-Outpost-Depot", "C-Outpost-Depot"),
+            new AutoPath("LeftTrench-Depot", "LeftTrench-Depot"),
+            new AutoPath("LT-Neutral-Depot", "LT-Neutral-Depot"),
+            new AutoPath("LT-Neutral", "LT-Neutral"),
+            new AutoPath("LT-DoubleNeutral", "LT-DoubleNeutral"),
+            new AutoPath("RightTrench-Outpost", "RightTrench-Outpost"),
+            new AutoPath("RT-Neutral-Outpost", "RT-Neutral-Outpost"),
+            new AutoPath("Rotate-RT-Neutral", "Rotate-RT-Neutral"),
+            new AutoPath("RT-Neutral", "RT-Neutral"),
+            new AutoPath("RT-DoubleNeutral", "RT-DoubleNeutral"),
+            new AutoPath("RT-BLOCK", "RT-BLOCK"),
+            new AutoPath("LT-BLOCK", "LT-BLOCK"));
+
+    rebuiltPaths = physicalRebuiltPaths;
+
+    commandsMap = Map.of(0, rebuiltPaths);
+    namesToAuto.clear();
+    for (List<AutoPath> autos : commandsMap.values()) {
+      for (AutoPath auto : autos) {
+        namesToAuto.put(auto.getDisplayName(), auto);
+      }
+    }
+
+    pathsInitialized = true;
+  }
+
+  private static void requirePathsInitialized() {
+    if (!pathsInitialized) {
+      throw new IllegalStateException(
+          "Auto paths are not initialized. Call AutoLogic.initCommandsAndPaths().");
+    }
+  }
+
+  public static void initSmartDashBoard() {
+    requirePathsInitialized();
+
+    startPositionChooser.setDefaultOption(StartPosition.MISC.title, StartPosition.MISC);
+
+    for (StartPosition pos : StartPosition.values()) {
+      startPositionChooser.addOption(pos.title, pos);
+    }
+
+    gameObjects.setDefaultOption("0", 0);
+    for (int i = 1; i < commandsMap.size(); i++) {
+      gameObjects.addOption(String.valueOf(i), i);
+    }
+
+    autoDelayEntry.setDouble(0.0);
+
+    SmartDashboard.putData("Starting Position", startPositionChooser);
+    SmartDashboard.putData("Auto Mode", gameObjects);
+    SmartDashboard.putData("Available Auto Variants", availableAutos);
+    SmartDashboard.putString("Auto Key", keys);
+
+    startPositionChooser.onChange(v -> filterAutos(gameObjects.getSelected()));
+    gameObjects.onChange(v -> filterAutos(gameObjects.getSelected()));
+
+    filterAutos(gameObjects.getSelected());
+  }
+
+  /* ---------------- Filtering ---------------- */
+
+  public static void filterAutos(int numGameObjects) {
+    requirePathsInitialized();
+
+    availableAutos.clearOptions();
+    availableAutos.setDefaultOption(defaultPath.getDisplayName(), defaultPath.getDisplayName());
+
+    List<AutoPath> autoList = commandsMap.get(numGameObjects);
+    if (autoList == null) return;
+
+    for (AutoPath auto : autoList) {
+      if (auto.getStartPose().equals(startPositionChooser.getSelected())) {
+        availableAutos.addOption(auto.getDisplayName(), auto.getDisplayName());
+      }
+    }
+  }
+
+  /* ---------------- Getters ---------------- */
+
+  public static String getSelectedAutoName() {
+    return availableAutos.getSelectedName();
+  }
+
+  public static boolean chooserHasAutoSelected() {
+    return availableAutos.getSelected() != null;
+  }
+
+  public static Pose2d getSelectedAutoStartingPose() {
+    requirePathsInitialized();
+
+    String selectedAutoName = getSelectedAutoName();
+    AutoPath selectedPath = namesToAuto.get(selectedAutoName);
+
+    if (selectedPath != null && selectedPath.getStartPose2d() != null) {
+      return selectedPath.getStartPose2d();
+    }
+
+    if (defaultPath.getDisplayName().equals(selectedAutoName)
+        && defaultPath.getStartPose2d() != null) {
+      return defaultPath.getStartPose2d();
+    }
+
+    return Pose2d.kZero;
+  }
+
+  public static Command getSelectedAuto() {
+    requirePathsInitialized();
+
+    double delay = autoDelayEntry.getDouble(0.0);
+
+    AutoPath path = namesToAuto.get(getSelectedAutoName());
+    if (path == null) {
+      path = defaultPath;
+    }
+
+    String autoName = path.getAutoName();
+
+    return Commands.waitSeconds(delay).andThen(AutoBuilder.buildAuto(autoName)).withName(autoName);
+  }
+
+  /* ---------------- PathPlanner ---------------- */
+
+  public static Command getAutoCommand(String pathName)
+      throws FileVersionException, IOException, ParseException {
+
+    PathPlannerPath path = PathPlannerPath.fromPathFile(pathName);
+    return AutoBuilder.followPath(path);
+  }
+
+  private static void registerCommands() {
+    // Reconfigure this when launcher, indexing and climb is coded
+
+    // if (s.launcherSubsystem != null && s.indexerSubsystem != null) {
+    // if (Robot.isSimulation()) {
+    // NamedCommands.registerCommand(
+    // "launch", launcherSimCommand().andThen(Commands.print("launch")));
+    // } else {
+    // NamedCommands.registerCommand(
+    // "launch", launcherCommand().andThen(Commands.print("launch")));
+    // }
+    // }
+    // if (s.indexerSubsystem != null) {
+    // NamedCommands.registerCommand("intake", intakeCommand());
+    // }
+    // NamedCommands.registerCommand("climb", climbCommand());
+  }
+}
