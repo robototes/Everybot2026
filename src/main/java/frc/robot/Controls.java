@@ -10,10 +10,14 @@ import static edu.wpi.first.units.Units.RotationsPerSecond;
 
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
+import com.ctre.phoenix6.swerve.SwerveRequest.SwerveDriveBrake;
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.generated.AlphaTunerConstants;
+import frc.robot.util.GetTargetFromPose;
+import frc.robot.util.tuning.WheelRadiusCharacterization;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -24,12 +28,16 @@ import frc.robot.generated.AlphaTunerConstants;
 public class Controls {
 
   private static final int DRIVER_CONTROLLER_PORT = 0;
+  private static final int TEST_CONTROLLER_PORT = 1;
   private static final double JOYSTICK_DEADBAND = 0.1;
   private final Subsystems s;
   private static final double SWERVE_DEADBAND = 0.001;
 
   private final CommandXboxController driverController =
       new CommandXboxController(DRIVER_CONTROLLER_PORT);
+
+  private final CommandXboxController testController =
+      new CommandXboxController(TEST_CONTROLLER_PORT);
 
   public static final double MaxSpeed = AlphaTunerConstants.kSpeedAt12Volts.in(MetersPerSecond);
 
@@ -41,19 +49,8 @@ public class Controls {
   public Controls(Subsystems subsystems) {
     s = subsystems;
     // Configure the trigger bindings
-    configureBindings();
+    configureDrivebaseBindings();
   }
-
-  /**
-   * Use this method to define your trigger->command mappings. Triggers can be created via the
-   * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with an arbitrary
-   * predicate, or via the named factories in {@link
-   * edu.wpi.first.wpilibj2.command.button.CommandGenericHID}'s subclasses for {@link
-   * CommandXboxController Xbox}/{@link edu.wpi.first.wpilibj2.command.button.CommandPS4Controller
-   * PS4} controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
-   * joysticks}.
-   */
-  private void configureBindings() {}
 
   // takes the X value from the joystick, and applies a deadband and input scaling
   private double getDriveX() {
@@ -61,6 +58,10 @@ public class Controls {
     // Robot +X is forward
     double input = MathUtil.applyDeadband(-driverController.getLeftY(), JOYSTICK_DEADBAND);
     return input * MaxSpeed;
+  }
+
+  private Trigger connected(CommandXboxController controller) {
+    return new Trigger(() -> controller.isConnected());
   }
 
   // takes the Y value from the joystick, and applies a deadband and input scaling
@@ -86,4 +87,46 @@ public class Controls {
           .withDeadband(SWERVE_DEADBAND)
           .withRotationalDeadband(SWERVE_DEADBAND)
           .withDriveRequestType(DriveRequestType.Velocity);
+
+  private void configureDrivebaseBindings() {
+    if (s.drivebaseSubsystem == null) {
+      // Stop running this method
+      return;
+    }
+
+    // readyToShoot = GetTargetFromPose.autoShoot(s.drivebaseSubsystem);
+
+    connected(testController)
+        .and(testController.y())
+        .whileTrue(
+            WheelRadiusCharacterization.wheelRadiusCharacterizationCommand(s.drivebaseSubsystem));
+    // Note that X is defined as forward according to WPILib convention,
+    // and Y is defined as to the left according to WPILib convention.
+
+    // the driving command for just driving around
+    s.drivebaseSubsystem.setDefaultCommand(
+        // s.drivebaseSubsystem will execute this command periodically
+
+        // applying the request to drive with the inputs
+        s.drivebaseSubsystem
+            .applyRequest(
+                () ->
+                    drive
+                        .withVelocityX(getDriveX())
+                        .withVelocityY(getDriveY())
+                        .withRotationalRate(getDriveRotate()))
+            .withName("Drive"));
+
+    driverController
+        .a()
+        .whileTrue(Commands.run(() -> s.drivebaseSubsystem.setControl(new SwerveDriveBrake())));
+
+    // reset pose incase vision is bugging
+    driverController
+        .back()
+        .onTrue(
+            s.drivebaseSubsystem
+                .runOnce(() -> s.drivebaseSubsystem.resetPose(GetTargetFromPose.getRestPose()))
+                .withName("Reset to Hub"));
+  }
 }
