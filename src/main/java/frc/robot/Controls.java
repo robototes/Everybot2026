@@ -40,20 +40,9 @@ public class Controls {
 
   public Controls(Subsystems subsystems) {
     s = subsystems;
-    // Configure the trigger bindings
-    configureBindings();
+    configureIntake();
   }
 
-  /**
-   * Use this method to define your trigger->command mappings. Triggers can be created via the
-   * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with an arbitrary
-   * predicate, or via the named factories in {@link
-   * edu.wpi.first.wpilibj2.command.button.CommandGenericHID}'s subclasses for {@link
-   * CommandXboxController Xbox}/{@link edu.wpi.first.wpilibj2.command.button.CommandPS4Controller
-   * PS4} controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
-   * joysticks}.
-   */
-  private void configureBindings() {}
 
   // takes the X value from the joystick, and applies a deadband and input scaling
   private double getDriveX() {
@@ -86,4 +75,8 @@ public class Controls {
           .withDeadband(SWERVE_DEADBAND)
           .withRotationalDeadband(SWERVE_DEADBAND)
           .withDriveRequestType(DriveRequestType.Velocity);
+
+  private void configureIntake() {
+    driverController.rightBumper().whileTrue(s.intakeSubsystem.startIntake());
+  }
 }
