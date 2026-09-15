@@ -12,7 +12,6 @@ import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.generated.AlphaTunerConstants;
 
 /**
@@ -42,7 +41,6 @@ public class Controls {
     s = subsystems;
     configureIntake();
   }
-
 
   // takes the X value from the joystick, and applies a deadband and input scaling
   private double getDriveX() {
