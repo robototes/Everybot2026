@@ -41,11 +41,6 @@ public class Controls {
 
   public static final double MaxSpeed = AlphaTunerConstants.kSpeedAt12Volts.in(MetersPerSecond);
 
-  // kSpeedAt12Volts desired top speed
-  public static double MaxAngularRate =
-      RotationsPerSecond.of(0.75)
-          .in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
-
   public Controls(Subsystems subsystems) {
     s = subsystems;
     // Configure the trigger bindings
