@@ -75,6 +75,8 @@ public class Controls {
           .withDriveRequestType(DriveRequestType.Velocity);
 
   private void configureIntake() {
-    driverController.rightBumper().whileTrue(s.intakeSubsystem.startIntake());
+    if (s.intakeSubsystem != null) {
+      driverController.rightBumper().whileTrue(s.intakeSubsystem.startIntake());
+    }
   }
 }

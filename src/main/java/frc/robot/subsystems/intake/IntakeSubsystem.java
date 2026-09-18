@@ -14,6 +14,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
   private final TalonFX intakeMotor;
 
+  // TODO: set rps
   private static final double TARGET_RPS = 0.0;
 
   public IntakeSubsystem() {
@@ -31,6 +32,7 @@ public class IntakeSubsystem extends SubsystemBase {
     talonFXConfigs.CurrentLimits.StatorCurrentLimitEnable = true;
     talonFXConfigs.CurrentLimits.SupplyCurrentLimitEnable = true;
 
+    // TODO: set values
     talonFXConfigs.Slot0.kP = 0.0;
     talonFXConfigs.Slot0.kS = 0.0;
     talonFXConfigs.Slot0.kA = 0.0;
@@ -40,7 +42,7 @@ public class IntakeSubsystem extends SubsystemBase {
   }
 
   public Command startIntake() {
-    return runEnd(
+    return startEnd(
             () -> {
               runIntake(TARGET_RPS);
             },
