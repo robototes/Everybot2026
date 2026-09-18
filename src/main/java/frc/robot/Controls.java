@@ -32,6 +32,7 @@ public class Controls {
   private static final double JOYSTICK_DEADBAND = 0.1;
   private final Subsystems s;
   private static final double SWERVE_DEADBAND = 0.001;
+  private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
 
   private final CommandXboxController driverController =
       new CommandXboxController(DRIVER_CONTROLLER_PORT);
@@ -119,7 +120,7 @@ public class Controls {
 
     driverController
         .a()
-        .whileTrue(Commands.run(() -> s.drivebaseSubsystem.setControl(new SwerveDriveBrake())));
+        .whileTrue(Commands.run(() -> s.drivebaseSubsystem.setControl(brake)).withName("Brake"));
 
     // reset pose incase vision is bugging
     driverController
