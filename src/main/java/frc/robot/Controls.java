@@ -11,6 +11,7 @@ import com.ctre.phoenix6.swerve.SwerveRequest;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.generated.AlphaTunerConstants;
 import frc.robot.util.GetTargetFromPose;
 import frc.robot.util.tuning.WheelRadiusCharacterization;
@@ -85,6 +86,8 @@ public class Controls {
     if (s.intakeSubsystem != null) {
       driverController.rightBumper().whileTrue(s.intakeSubsystem.startIntake());
     }
+  }
+
   private void configureDrivebaseBindings() {
     if (s.drivebaseSubsystem == null) {
       // Stop running this method
