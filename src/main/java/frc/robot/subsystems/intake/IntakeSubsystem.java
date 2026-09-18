@@ -18,6 +18,7 @@ public class IntakeSubsystem extends SubsystemBase {
   private static final double TARGET_RPS = 0.0;
 
   public IntakeSubsystem() {
+    // TODO: "if the motor is on the CANivore, pass the bus name or constant"
     intakeMotor = new TalonFX(Hardware.IntakeMotor);
     motorConfigs();
   }
