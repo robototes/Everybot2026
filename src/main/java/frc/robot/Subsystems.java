@@ -5,12 +5,14 @@ import static frc.robot.Subsystems.SubsystemConstants.DRIVEBASE_ENABLED;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import frc.robot.generated.AlphaTunerConstants;
 import frc.robot.subsystems.drivebase.CommandSwerveDrivetrain;
+import frc.robot.subsystems.ClimbSubsystem;
 
 public class Subsystems {
 
   // <SUBSYSTEM>_ENABLED constants go here
   public static class SubsystemConstants {
     public static final boolean DRIVEBASE_ENABLED = true;
+    public static final boolean CLIMB_ENABLED = true;
   }
 
   public final CommandSwerveDrivetrain drivebaseSubsystem;
@@ -32,6 +34,13 @@ public class Subsystems {
 
     } else {
       drivebaseSubsystem = null;
+    }
+
+    if (CLIMB_ENABLED) {
+      climbSubsystem = new ClimbSubsystem();
+      
+    } else {
+      climbSubsystem = null;
     }
   }
 }
