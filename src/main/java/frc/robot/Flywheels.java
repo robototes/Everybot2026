@@ -10,7 +10,6 @@ import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import java.util.function.DoubleSupplier;
 
 public class Flywheels extends SubsystemBase {
   private final TalonFX FlywheelOne;
@@ -71,49 +70,33 @@ public class Flywheels extends SubsystemBase {
     flConfigurator.apply(config);
   }
 
-  public Command setFlywheelVelocity(double rps) {
+  public Command runFlywheels() {
     return runEnd(
+            () -> {
+              startFlywheels(speed);
+            },
+            () -> {
+              stopFlywheels();
+            })
+        .withName("Run Flywheels");
+  }
+
+  public Command startFlywheels(double rps) {
+    return runOnce(
             () -> {
               request.Velocity = rps;
               FlywheelOne.setControl(request);
               FlywheelTwo.setControl(follow);
-            },
-            () -> {
-              FlywheelOne.stopMotor();
-              FlywheelTwo.stopMotor();
             })
-        .withName("Set Velocity");
-  }
-  public void setVelocityCommand() {
-    setFlywheelVelocity(speed);
+        .withName("Start Flywheels");
   }
 
-  public Command suppliedSetVelocity(DoubleSupplier rps) {
-    return runEnd(
-            () -> {
-              request.Velocity = rps.getAsDouble();
-              FlywheelOne.setControl(request);
-              FlywheelTwo.setControl(follow);
-            },
-            () -> {
-              FlywheelOne.stopMotor();
-              FlywheelTwo.stopMotor();
-            })
-        .withName("Supplied velocity command");
-  }
-
-  public void setVelocityRPS(double rps) {
-    request.Velocity = rps;
-    FlywheelOne.setControl(request);
-    FlywheelTwo.setControl(follow);
-  }
-
-  public Command stopCommand() {
+  public Command stopFlywheels() {
     return runOnce(
             () -> {
               FlywheelOne.stopMotor();
               FlywheelTwo.stopMotor();
             })
-        .withName("Stop motors command");
+        .withName("Stop Flywheels");
   }
 }

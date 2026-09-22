@@ -38,8 +38,7 @@ public class Subsystems {
     }
     if (FLYWHEELS_ENABLED) {
       Flywheels = new Flywheels();
-    }
-    else {
+    } else {
       Flywheels = null;
     }
   }
