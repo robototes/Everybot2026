@@ -1,7 +1,6 @@
 package frc.robot;
 
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
-import com.ctre.phoenix6.configs.TalonFXConfigurator;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicVelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -46,7 +45,6 @@ public class Flywheels extends SubsystemBase {
 
   private void configureMotors() {
     TalonFXConfiguration config = new TalonFXConfiguration();
-    TalonFXConfigurator flConfigurator = FlywheelOne.getConfigurator();
 
     // TODO: tune configs and PIDS, currently placeholder
     config.CurrentLimits.SupplyCurrentLimit = SupplyCurrentLimit;
@@ -67,7 +65,8 @@ public class Flywheels extends SubsystemBase {
 
     config.MotionMagic.MotionMagicAcceleration = MotionMagicAcceleration; // RPS^2
 
-    flConfigurator.apply(config);
+    FlywheelOne.getConfigurator().apply(config);
+    FlywheelTwo.getConfigurator().apply(config);
   }
 
   public Command runFlywheels() {
