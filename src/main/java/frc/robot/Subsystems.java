@@ -1,19 +1,23 @@
 package frc.robot;
 
 import static frc.robot.Subsystems.SubsystemConstants.DRIVEBASE_ENABLED;
+import static frc.robot.Subsystems.SubsystemConstants.INTAKE_ENABLED;
 
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import frc.robot.generated.AlphaTunerConstants;
 import frc.robot.subsystems.drivebase.CommandSwerveDrivetrain;
+import frc.robot.subsystems.intake.IntakeSubsystem;
 
 public class Subsystems {
 
   // <SUBSYSTEM>_ENABLED constants go here
   public static class SubsystemConstants {
     public static final boolean DRIVEBASE_ENABLED = true;
+    public static final boolean INTAKE_ENABLED = true;
   }
 
   public final CommandSwerveDrivetrain drivebaseSubsystem;
+  public final IntakeSubsystem intakeSubsystem;
 
   public Subsystems(Mechanism2d mechanism2d) {
     // Initialize subsystems here (don't forget to check if they're enabled!)
@@ -32,6 +36,12 @@ public class Subsystems {
 
     } else {
       drivebaseSubsystem = null;
+    }
+
+    if (INTAKE_ENABLED) {
+      intakeSubsystem = new IntakeSubsystem();
+    } else {
+      intakeSubsystem = null;
     }
   }
 }
