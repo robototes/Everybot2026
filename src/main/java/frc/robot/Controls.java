@@ -76,7 +76,11 @@ public class Controls {
   }
 
   private void configureFlywheelBindings() {
-    driverController.rightTrigger().whileTrue(s.flywheels.runFlywheels());
+    if (s.flywheels == null) {
+      return;
+    } else {
+      driverController.rightTrigger().whileTrue(s.flywheels.runFlywheels());
+    }
   }
 
   /* Setting up bindings for necessary control of the swerve drive platform */
