@@ -16,7 +16,7 @@ public class Subsystems {
   }
 
   public final CommandSwerveDrivetrain drivebaseSubsystem;
-  public final Flywheels Flywheels;
+  public final Flywheels flywheels;
 
   public Subsystems(Mechanism2d mechanism2d) {
     // Initialize subsystems here (don't forget to check if they're enabled!)
@@ -37,10 +37,9 @@ public class Subsystems {
       drivebaseSubsystem = null;
     }
     if (FLYWHEELS_ENABLED) {
-      Flywheels = new Flywheels();
-    }
-    else {
-      Flywheels = null;
+      flywheels = new Flywheels();
+    } else {
+      flywheels = null;
     }
   }
 }

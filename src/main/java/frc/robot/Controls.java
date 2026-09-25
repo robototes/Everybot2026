@@ -11,7 +11,6 @@ import static edu.wpi.first.units.Units.RotationsPerSecond;
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.generated.AlphaTunerConstants;
@@ -32,7 +31,8 @@ public class Controls {
 
   private final CommandXboxController driverController =
       new CommandXboxController(DRIVER_CONTROLLER_PORT);
-  private final CommandXboxController flywheelTestController = new CommandXboxController(FLYWHEEL_CONTROLLER_PORT);
+  private final CommandXboxController flywheelTestController =
+      new CommandXboxController(FLYWHEEL_CONTROLLER_PORT);
 
   public static final double MaxSpeed = AlphaTunerConstants.kSpeedAt12Volts.in(MetersPerSecond);
 
@@ -45,6 +45,7 @@ public class Controls {
     s = subsystems;
     // Configure the trigger bindings
     configureBindings();
+    configureFlywheelBindings();
   }
 
   /**
@@ -82,8 +83,10 @@ public class Controls {
     double input = MathUtil.applyDeadband(-driverController.getRightX(), JOYSTICK_DEADBAND);
     return input * MaxSpeed;
   }
+
   private void configureFlywheelBindings() {
-    driverController.rightTrigger().whileTrue(s.Flywheels.setVelocityCommand);
+    driverController.rightTrigger().whileTrue(s.flywheels.runFlywheels());
+  }
 
   /* Setting up bindings for necessary control of the swerve drive platform */
   private final SwerveRequest.FieldCentric drive =
