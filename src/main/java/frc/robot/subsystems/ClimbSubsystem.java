@@ -1,5 +1,3 @@
-package frc.robot.subsystems.index;
-
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfigurator;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -10,22 +8,23 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Hardware;
 
 public class ClimbSubsystem extends SubsystemBase {
-  public final CLIMB_MOTOR_ID = 0; //placeholder
+  public final int CLIMB_MOTOR_ID = 0; //placeholder
 
   private final TalonFX climbMotor;
-  
+
+  private double targetPos;
   public final double TARGET_POS_START = 0.0;
   public final double TARGET_POS_END = 0.0;
 
-  private final FlywheelSim motorSim;
+  //private final FlywheelSim motorSim; //add sim class later
 
-  public Climb() {
-    climbMotor = new TalonFX(Hardware.CLIMB_MOTOR_ID);
+  public ClimbSubsystem() {
+    climbMotor = new TalonFX(CLIMB_MOTOR_ID);
     climbConfig();
     if (RobotBase.isSimulation()) {
-      motorSim = null; //add sim later
+      //motorSim = null; //add sim later
     } else {
-      motorSim = null;
+      //motorSim = null;
     }
   }
 
@@ -48,9 +47,13 @@ public class ClimbSubsystem extends SubsystemBase {
 
     cfg.apply(talonFXConfiguration);
   }
-
-  public void setPos(double pos) {
-    climbMotor.setControl(request.withPosition(pos));
+  
+  public Command setPos(double pos) {
+    return runOnce(
+            () -> {
+              climbMotor.setPosition(pos);
+              targetPos = pos;
+            });
   }
 
   public void stopMotor() {
