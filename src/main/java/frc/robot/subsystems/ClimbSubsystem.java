@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Hardware;
 
 public class ClimbSubsystem extends SubsystemBase {
-  public final int CLIMB_MOTOR_ID = 0; //placeholder
+  public final int CLIMB_MOTOR_ID = 0; // TODO: placeholder
 
   private final TalonFX climbMotor;
 
@@ -17,15 +17,16 @@ public class ClimbSubsystem extends SubsystemBase {
   public final double TARGET_POS_START = 0.0;
   public final double TARGET_POS_END = 0.0;
 
-  //private final FlywheelSim motorSim; //add sim class later
+  // TODO: private final FlywheelSim motorSim; // TODO: add sim class later
 
   public ClimbSubsystem() {
     climbMotor = new TalonFX(CLIMB_MOTOR_ID);
     climbConfig();
     if (RobotBase.isSimulation()) {
-      //motorSim = null; //add sim later
+      // TODO: add sim later
+      // motorSim = null;
     } else {
-      //motorSim = null;
+      // motorSim = null;
     }
   }
 
@@ -70,12 +71,13 @@ public class ClimbSubsystem extends SubsystemBase {
 
   @Override
   public void simulationPeriodic() {
+    // TODO: add sim periodic
     // motorSim.setInput(climbMotor.getSimState().getMotorVoltage());
     // motorSim.update(TimedRobot.kDefaultPeriod); // every 20 ms
   }
 
   @Override
   public void periodic() {
-    //add stuff later
+    // TODO: add stuff later
   }
 }
