@@ -1,3 +1,4 @@
+import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfigurator;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -45,7 +46,14 @@ public class ClimbSubsystem extends SubsystemBase {
     talonFXConfiguration.Slot0.kS = 2.2;
     talonFXConfiguration.Slot0.kP = 10;
 
-    cfg.apply(talonFXConfiguration);
+    StatusCode status = StatusCode.StatusCodeNotInitialized;
+    for (int i = 0; i < 5; ++i) {
+      status = climbMotor.getConfigurator().apply(talonFXConfigs);
+      if (status.isOK()) break;
+    }
+    if (!status.isOK()) {
+      DriverStation.reportError("Failed to apply ClimbMotor configs: " + status, false);
+    }
   }
   
   public Command setPos(double pos) {
