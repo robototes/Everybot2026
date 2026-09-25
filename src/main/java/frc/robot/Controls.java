@@ -41,6 +41,7 @@ public class Controls {
 
   public Controls(Subsystems subsystems) {
     s = subsystems;
+    configureIntake();
     // Configure the trigger bindings
     configureFlywheelBindings();
     configureDrivebaseBindings();
@@ -89,6 +90,12 @@ public class Controls {
           .withDeadband(SWERVE_DEADBAND)
           .withRotationalDeadband(SWERVE_DEADBAND)
           .withDriveRequestType(DriveRequestType.Velocity);
+
+  private void configureIntake() {
+    if (s.intakeSubsystem != null) {
+      driverController.rightBumper().whileTrue(s.intakeSubsystem.startIntake());
+    }
+  }
 
   private void configureDrivebaseBindings() {
     if (s.drivebaseSubsystem == null) {

@@ -7,6 +7,9 @@ package frc.robot;
 public final class Hardware {
 
   public static final int PDH_ID = 1;
+
+  // TODO: better number when get robot
+  public static final int IntakeMotor = 0;
   // TODO: make this accurate to the actual robot
   public static final int FLYWHEEL_ONE_ID = 13;
   public static final int FLYWHEEL_TWO_ID = 14;
