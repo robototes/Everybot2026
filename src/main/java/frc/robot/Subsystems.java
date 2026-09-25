@@ -1,8 +1,8 @@
 package frc.robot;
 
 import static frc.robot.Subsystems.SubsystemConstants.DRIVEBASE_ENABLED;
-import static frc.robot.Subsystems.SubsystemConstants.INTAKE_ENABLED;
 import static frc.robot.Subsystems.SubsystemConstants.FLYWHEELS_ENABLED;
+import static frc.robot.Subsystems.SubsystemConstants.INTAKE_ENABLED;
 
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import frc.robot.generated.AlphaTunerConstants;
