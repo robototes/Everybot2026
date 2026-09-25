@@ -1,6 +1,7 @@
 package frc.robot;
 
 import static frc.robot.Subsystems.SubsystemConstants.DRIVEBASE_ENABLED;
+import static frc.robot.Subsystems.SubsystemConstants.FLYWHEELS_ENABLED;
 import static frc.robot.Subsystems.SubsystemConstants.INTAKE_ENABLED;
 
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
@@ -14,10 +15,12 @@ public class Subsystems {
   public static class SubsystemConstants {
     public static final boolean DRIVEBASE_ENABLED = true;
     public static final boolean INTAKE_ENABLED = true;
+    public static final boolean FLYWHEELS_ENABLED = true;
   }
 
   public final CommandSwerveDrivetrain drivebaseSubsystem;
   public final IntakeSubsystem intakeSubsystem;
+  public final Flywheels flywheels;
 
   public Subsystems(Mechanism2d mechanism2d) {
     // Initialize subsystems here (don't forget to check if they're enabled!)
@@ -42,6 +45,11 @@ public class Subsystems {
       intakeSubsystem = new IntakeSubsystem();
     } else {
       intakeSubsystem = null;
+    }
+    if (FLYWHEELS_ENABLED) {
+      flywheels = new Flywheels();
+    } else {
+      flywheels = null;
     }
   }
 }

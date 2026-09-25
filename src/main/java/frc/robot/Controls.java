@@ -43,6 +43,7 @@ public class Controls {
     s = subsystems;
     configureIntake();
     // Configure the trigger bindings
+    configureFlywheelBindings();
     configureDrivebaseBindings();
   }
 
@@ -73,6 +74,14 @@ public class Controls {
     // Robot +angle is CCW (left)
     double input = MathUtil.applyDeadband(-driverController.getRightX(), JOYSTICK_DEADBAND);
     return input * MaxSpeed;
+  }
+
+  private void configureFlywheelBindings() {
+    if (s.flywheels == null) {
+      return;
+    } else {
+      driverController.rightTrigger().whileTrue(s.flywheels.runFlywheels());
+    }
   }
 
   /* Setting up bindings for necessary control of the swerve drive platform */
