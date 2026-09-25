@@ -26,7 +26,6 @@ public class Controls {
 
   private static final int DRIVER_CONTROLLER_PORT = 0;
   private static final int TEST_CONTROLLER_PORT = 1;
-  private static final int FLYWHEEL_CONTROLLER_PORT = 2;
   private static final double JOYSTICK_DEADBAND = 0.1;
   private final Subsystems s;
   private static final double SWERVE_DEADBAND = 0.001;
@@ -34,8 +33,6 @@ public class Controls {
 
   private final CommandXboxController driverController =
       new CommandXboxController(DRIVER_CONTROLLER_PORT);
-  private final CommandXboxController flywheelTestController =
-      new CommandXboxController(FLYWHEEL_CONTROLLER_PORT);
 
   private final CommandXboxController testController =
       new CommandXboxController(TEST_CONTROLLER_PORT);
