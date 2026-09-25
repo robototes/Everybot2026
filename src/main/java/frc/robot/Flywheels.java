@@ -1,5 +1,7 @@
 package frc.robot;
 
+import java.util.function.DoubleSupplier;
+
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfigurator;
 import com.ctre.phoenix6.controls.Follower;
@@ -10,7 +12,6 @@ import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import java.util.function.DoubleSupplier;
 
 public class Flywheels extends SubsystemBase {
   private final TalonFX flywheelOne;
@@ -46,8 +47,7 @@ public class Flywheels extends SubsystemBase {
 
   private void configureMotors() {
     TalonFXConfiguration config = new TalonFXConfiguration();
-    TalonFXConfigurator flConfigurator = flywheelOne.getConfigurator();
-
+    
     // TODO: tune configs and PIDS, currently placeholder
     config.CurrentLimits.SupplyCurrentLimit = supplyCurrentLimit;
     config.CurrentLimits.StatorCurrentLimit = statorCurrentLimit;
@@ -67,7 +67,8 @@ public class Flywheels extends SubsystemBase {
 
     config.MotionMagic.MotionMagicAcceleration = motionMagicAcceleration; // RPS^2
 
-    flConfigurator.apply(config);
+    flywheelOne.getConfigurator().apply(config);
+    flywheelTwo.getConfigurator().apply(config);
   }
 
   public Command runFlywheels() {
