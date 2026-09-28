@@ -4,9 +4,6 @@
 
 package frc.robot;
 
-import static frc.robot.Subsystems.SubsystemConstants.DRIVEBASE_ENABLED;
-
-import com.pathplanner.lib.commands.FollowPathCommand;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -28,9 +25,7 @@ import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.Subsystems.SubsystemConstants;
-import frc.robot.subsystems.auto.AutoBuilderConfig;
-import frc.robot.subsystems.auto.AutoLogic;
-import frc.robot.subsystems.auto.AutonomousField;
+import frc.robot.subsystems.auto.BLineLogic;
 import frc.robot.util.AllianceUtils;
 import frc.robot.util.BuildInfo;
 import frc.robot.util.DriveStateNtLogger;
@@ -93,10 +88,8 @@ public class Robot extends TimedRobot {
 
     controls = new Controls(subsystems);
 
-    if (DRIVEBASE_ENABLED) {
-      AutoBuilderConfig.buildAuto(subsystems.drivebaseSubsystem, false);
-    }
-    AutoLogic.init(subsystems);
+    BLineLogic.init(subsystems);
+    BLineLogic.configure(subsystems);
     if (Robot.isSimulation()) {
       robotSim = new RobotSim(subsystems.drivebaseSubsystem);
     } else {
@@ -119,11 +112,8 @@ public class Robot extends TimedRobot {
     SmartDashboard.putData(CommandScheduler.getInstance());
 
     if (SubsystemConstants.DRIVEBASE_ENABLED) {
-      AutoLogic.initCommandsAndPaths(false);
-      AutonomousField.initSmartDashBoard(() -> "Field", 0, 0, this::addPeriodic);
 
-      AutoLogic.initSmartDashBoard();
-      CommandScheduler.getInstance().schedule(FollowPathCommand.warmupCommand());
+      BLineLogic.initAdvantageKit();
     }
     WebServer.start(5800, Filesystem.getDeployDirectory().getPath());
 
@@ -189,7 +179,10 @@ public class Robot extends TimedRobot {
 
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
-  public void autonomousInit() {}
+  public void autonomousInit() {
+
+    CommandScheduler.getInstance().schedule(BLineLogic.handleAutos());
+  }
 
   /** This function is called periodically during autonomous. */
   @Override
