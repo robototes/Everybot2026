@@ -92,11 +92,11 @@ public class BLineLogic {
   public static void init(Subsystems subsystems) {
     s = subsystems;
   
-
+ 
     if (pathsInitialized) return;
-
+ registerCommands(s);
     initializePaths();
-    registerCommands(s);
+    
     pathsInitialized = true;
   }
 
@@ -278,7 +278,7 @@ public class BLineLogic {
   }
 
   public static Command buildAuto() {
-    return BLineCommands.sequence(
+    return Commands.sequence(
         Commands.waitSeconds(autoDelayEntry.getDouble(0.0)),
         buildPath(rebuiltPaths.get(rebuiltPaths.indexOf(getSelectedAutoPath())).getPath(), true),
         AutoCommands.launch(s));

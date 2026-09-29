@@ -15,8 +15,8 @@
     },
     {
       "type": "event_trigger",
-      "t_ratio": 0.5,
-      "lib_key": "Intake"
+      "t_ratio": 0.0,
+      "lib_key": "Wait"
     },
     {
       "type": "waypoint",
@@ -32,8 +32,8 @@
     },
     {
       "type": "event_trigger",
-      "t_ratio": 0.0,
-      "lib_key": "Wait"
+      "t_ratio": 0.5,
+      "lib_key": "Intake"
     },
     {
       "type": "waypoint",
