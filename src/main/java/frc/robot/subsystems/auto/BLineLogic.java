@@ -91,11 +91,12 @@ public class BLineLogic {
 
   public static void init(Subsystems subsystems) {
     s = subsystems;
-    registerCommands(s);
+  
 
     if (pathsInitialized) return;
 
     initializePaths();
+    registerCommands(s);
     pathsInitialized = true;
   }
 
@@ -107,7 +108,9 @@ public class BLineLogic {
   private static void initializePaths() {
     defaultPath = new BLinePath("default", "Center", "default");
 
-    rebuiltPaths = List.of(defaultPath, new BLinePath("other", "RT", "other"));
+
+     rebuiltPaths = List.of(defaultPath, new BLinePath("depot", "RT", "depot"),
+     new BLinePath("outpost", "RT", "outpost"));
     autos.clear();
     autos.addAll(rebuiltPaths);
     commandsMap = Map.of(0, rebuiltPaths);
@@ -192,7 +195,7 @@ public class BLineLogic {
   }
 
   static Pose2d getTrenchPose() {
-    return isMirrored() ? LEFT_TRENCH_POSE : RIGHT_TRENCH_POSE;
+    return isMirrored() ? RIGHT_TRENCH_POSE : LEFT_TRENCH_POSE;
   }
 
   public static void filterAutos(int numGameObjects) {
@@ -223,7 +226,7 @@ public class BLineLogic {
     BLinePath selected = getSelectedAutoPath();
     if (selected == null) return Pose2d.kZero;
 
-    return isMirrored() ? LEFT_TRENCH_POSE : RIGHT_TRENCH_POSE;
+    return isMirrored() ? RIGHT_TRENCH_POSE : LEFT_TRENCH_POSE;
   }
 
   // ========================= AUTO EXECUTION =========================
