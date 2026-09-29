@@ -16,4 +16,7 @@ public class AutoCommands {
   public static Command intake(Subsystems s) {
     return Commands.runOnce(() -> s.intakeSubsystem.startIntake());
   }
+  public static Command waiting(double timeout) {
+    return Commands.runOnce(() -> Commands.waitSeconds(timeout));
+  }
 }
