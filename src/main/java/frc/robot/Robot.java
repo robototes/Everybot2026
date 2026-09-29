@@ -70,7 +70,7 @@ public class Robot extends LoggedRobot {
    */
   protected Robot() {
     // advantagekit stuff
-    Logger.recordMetadata("ProjectName", "MyProject"); // Set a metadata value
+    Logger.recordMetadata("Robototes", "Everybot"); // Set a metadata value
 
     if (isReal()) {
       Logger.addDataReceiver(new WPILOGWriter()); // Log to a USB stick ("/U/logs")
