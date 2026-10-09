@@ -26,7 +26,7 @@ import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-import frc.robot.generated.AlphaTunerConstants;
+import frc.robot.generated.EveryBotTunerConstants;
 import frc.robot.util.AllianceUtils;
 import frc.robot.util.GetTargetFromPose;
 import java.util.function.Supplier;
@@ -297,7 +297,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
   }
 
   public double[] getWheelRotations() {
-    double wheelCircumference = tau(AlphaTunerConstants.kWheelRadius.abs(Meter));
+    double wheelCircumference = tau(EveryBotTunerConstants.kWheelRadius.abs(Meter));
     double[] values = new double[4];
     for (int i = 0; i < values.length; i++) {
       values[i] = getState().ModulePositions[i].distanceMeters / wheelCircumference;

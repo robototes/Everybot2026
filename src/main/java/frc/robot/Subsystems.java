@@ -5,7 +5,7 @@ import static frc.robot.Subsystems.SubsystemConstants.FLYWHEELS_ENABLED;
 import static frc.robot.Subsystems.SubsystemConstants.INTAKE_ENABLED;
 
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
-import frc.robot.generated.AlphaTunerConstants;
+import frc.robot.generated.EveryBotTunerConstants;
 import frc.robot.subsystems.drivebase.CommandSwerveDrivetrain;
 import frc.robot.subsystems.intake.IntakeSubsystem;
 
@@ -35,7 +35,7 @@ public class Subsystems {
     // }
 
     if (DRIVEBASE_ENABLED) {
-      drivebaseSubsystem = AlphaTunerConstants.createDrivetrain();
+      drivebaseSubsystem = EveryBotTunerConstants.createDrivetrain();
 
     } else {
       drivebaseSubsystem = null;

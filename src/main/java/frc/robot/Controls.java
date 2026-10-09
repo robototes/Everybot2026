@@ -12,7 +12,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.generated.AlphaTunerConstants;
+import frc.robot.generated.EveryBotTunerConstants;
 import frc.robot.util.GetTargetFromPose;
 import frc.robot.util.tuning.WheelRadiusCharacterization;
 
@@ -37,13 +37,13 @@ public class Controls {
   private final CommandXboxController testController =
       new CommandXboxController(TEST_CONTROLLER_PORT);
 
-  public static final double MaxSpeed = AlphaTunerConstants.kSpeedAt12Volts.in(MetersPerSecond);
+  public static final double MaxSpeed = EveryBotTunerConstants.kSpeedAt12Volts.in(MetersPerSecond);
 
   public Controls(Subsystems subsystems) {
     s = subsystems;
-    configureIntake();
+    // configureIntake();
     // Configure the trigger bindings
-    configureFlywheelBindings();
+    // configureFlywheelBindings();
     configureDrivebaseBindings();
   }
 

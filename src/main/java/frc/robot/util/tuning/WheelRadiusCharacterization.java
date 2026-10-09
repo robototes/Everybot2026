@@ -8,7 +8,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import frc.robot.generated.AlphaTunerConstants;
+import frc.robot.generated.EveryBotTunerConstants;
 import frc.robot.subsystems.drivebase.CommandSwerveDrivetrain;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -20,16 +20,16 @@ public class WheelRadiusCharacterization {
       Math.max(
           Math.max(
               Math.hypot(
-                  AlphaTunerConstants.FrontLeft.LocationX, AlphaTunerConstants.FrontLeft.LocationY),
+                  EveryBotTunerConstants.FrontLeft.LocationX, EveryBotTunerConstants.FrontLeft.LocationY),
               Math.hypot(
-                  AlphaTunerConstants.FrontRight.LocationX,
-                  AlphaTunerConstants.FrontRight.LocationY)),
+                  EveryBotTunerConstants.FrontRight.LocationX,
+                  EveryBotTunerConstants.FrontRight.LocationY)),
           Math.max(
               Math.hypot(
-                  AlphaTunerConstants.BackLeft.LocationX, AlphaTunerConstants.BackLeft.LocationY),
+                  EveryBotTunerConstants.BackLeft.LocationX, EveryBotTunerConstants.BackLeft.LocationY),
               Math.hypot(
-                  AlphaTunerConstants.BackRight.LocationX,
-                  AlphaTunerConstants.BackRight.LocationY)));
+                  EveryBotTunerConstants.BackRight.LocationX,
+                  EveryBotTunerConstants.BackRight.LocationY)));
   private static final NumberFormat FORMATTER = new DecimalFormat("#0.000");
   private static final int NUM_MODULES = 4;
 

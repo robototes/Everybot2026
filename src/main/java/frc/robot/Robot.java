@@ -93,10 +93,6 @@ public class Robot extends TimedRobot {
 
     controls = new Controls(subsystems);
 
-    if (DRIVEBASE_ENABLED) {
-      AutoBuilderConfig.buildAuto(subsystems.drivebaseSubsystem, false);
-    }
-    AutoLogic.init(subsystems);
     if (Robot.isSimulation()) {
       robotSim = new RobotSim(subsystems.drivebaseSubsystem);
     } else {
@@ -118,13 +114,7 @@ public class Robot extends TimedRobot {
 
     SmartDashboard.putData(CommandScheduler.getInstance());
 
-    if (SubsystemConstants.DRIVEBASE_ENABLED) {
-      AutoLogic.initCommandsAndPaths(false);
-      AutonomousField.initSmartDashBoard(() -> "Field", 0, 0, this::addPeriodic);
 
-      AutoLogic.initSmartDashBoard();
-      CommandScheduler.getInstance().schedule(FollowPathCommand.warmupCommand());
-    }
     WebServer.start(5800, Filesystem.getDeployDirectory().getPath());
 
     logger = new DriveStateSignalLogger();
