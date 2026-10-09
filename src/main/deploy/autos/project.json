@@ -111,6 +111,11 @@
           }
         ]
       }
+    },
+    {
+      "path_id": "path-c4006ad6-8b87-43aa-ae38-04f8d87a7eb0",
+      "display_name": "fun",
+      "file_name": "fun.json"
     }
   ],
   "path_groups": [],

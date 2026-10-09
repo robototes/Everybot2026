@@ -110,7 +110,7 @@ public class BLineLogic {
 
 
      rebuiltPaths = List.of(defaultPath, new BLinePath("depot", "RT", "depot"),
-     new BLinePath("outpost", "RT", "outpost"));
+     new BLinePath("fun", "RT", "fun"));
     autos.clear();
     autos.addAll(rebuiltPaths);
     commandsMap = Map.of(0, rebuiltPaths);
