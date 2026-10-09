@@ -14,8 +14,8 @@ public class Subsystems {
   // <SUBSYSTEM>_ENABLED constants go here
   public static class SubsystemConstants {
     public static final boolean DRIVEBASE_ENABLED = true;
-    public static final boolean INTAKE_ENABLED = true;
-    public static final boolean FLYWHEELS_ENABLED = true;
+    public static final boolean INTAKE_ENABLED = false;
+    public static final boolean FLYWHEELS_ENABLED = false;
   }
 
   public final CommandSwerveDrivetrain drivebaseSubsystem;
