@@ -10,6 +10,11 @@ public final class Hardware {
 
   // TODO: better number when get robot
   public static final int IntakeMotor = 0;
+  public static final int IntakeOne = 2;
+  public static final int IntakeTwo = 3;
+
+  public static final int IntakeThree = 4;
+  public static final int IntakeFOUR = 5;
   // TODO: make this accurate to the actual robot
   public static final int FLYWHEEL_ONE_ID = 13;
   public static final int FLYWHEEL_TWO_ID = 14;
