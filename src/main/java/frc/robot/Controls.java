@@ -103,6 +103,9 @@ public class Controls {
     if (s.intakeV3 != null) {
       driverController.leftBumper().whileTrue(s.intakeV3.startIntake()); // intake with 2 motors again
     }
+    if (s.claudeTake != null) {
+      driverController.leftTrigger().whileTrue(s.claudeTake.startIntake()); // claude made this trust
+    }
   }
 
   private void configureDrivebaseBindings() {

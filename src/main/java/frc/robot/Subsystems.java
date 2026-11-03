@@ -1,5 +1,6 @@
 package frc.robot;
 
+import static frc.robot.Subsystems.SubsystemConstants.CLAUDETAKE_ENABLED;
 import static frc.robot.Subsystems.SubsystemConstants.DRIVEBASE_ENABLED;
 import static frc.robot.Subsystems.SubsystemConstants.FLYWHEELS_ENABLED;
 import static frc.robot.Subsystems.SubsystemConstants.INTAKEV2_ENABLED;
@@ -9,6 +10,7 @@ import static frc.robot.Subsystems.SubsystemConstants.INTAKE_ENABLED;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import frc.robot.generated.AlphaTunerConstants;
 import frc.robot.subsystems.drivebase.CommandSwerveDrivetrain;
+import frc.robot.subsystems.intake.ClaudeTake;
 import frc.robot.subsystems.intake.IntakeSubsystem;
 import frc.robot.subsystems.intake.IntakeV2;
 import frc.robot.subsystems.intake.IntakeV3;
@@ -22,6 +24,7 @@ public class Subsystems {
     public static final boolean FLYWHEELS_ENABLED = true;
     public static final boolean INTAKEV2_ENABLED = true;
     public static final boolean INTAKEV3_ENABLED = true;
+    public static final boolean CLAUDETAKE_ENABLED = true;
   }
 
   public final CommandSwerveDrivetrain drivebaseSubsystem;
@@ -29,6 +32,7 @@ public class Subsystems {
   public final Flywheels flywheels;
   public final IntakeV2 intakeV2;
   public final IntakeV3 intakeV3;
+  public final ClaudeTake claudeTake;
 
   public Subsystems(Mechanism2d mechanism2d) {
     // Initialize subsystems here (don't forget to check if they're enabled!)
@@ -68,6 +72,11 @@ public class Subsystems {
       intakeV3 = new IntakeV3();
     } else {
       intakeV3 = null;
+    }
+    if (CLAUDETAKE_ENABLED) {
+      claudeTake = new ClaudeTake();
+    } else {
+      claudeTake = null;
     }
   }
 }

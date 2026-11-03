@@ -15,6 +15,9 @@ public final class Hardware {
 
   public static final int IntakeThree = 4;
   public static final int IntakeFOUR = 5;
+
+  public static final int IntakeFive = 6;
+  public static final int IntakeSix = 7;
   // TODO: make this accurate to the actual robot
   public static final int FLYWHEEL_ONE_ID = 13;
   public static final int FLYWHEEL_TWO_ID = 14;
