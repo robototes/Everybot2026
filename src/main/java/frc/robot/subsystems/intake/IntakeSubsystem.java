@@ -2,7 +2,7 @@ package frc.robot.subsystems.intake;
 
 import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
-import com.ctre.phoenix6.controls.VelocityTorqueCurrentFOC;
+import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
@@ -12,12 +12,12 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Hardware;
 
 public class IntakeSubsystem extends SubsystemBase {
-  private final VelocityTorqueCurrentFOC velocityRequest = new VelocityTorqueCurrentFOC(0);
+  private final DutyCycleOut intakeMotorDutyCycle = new DutyCycleOut(0.0).withEnableFOC(true);
 
   private final TalonFX intakeMotor;
 
   // TODO: set rps
-  private static final double TARGET_RPS = 40.0;
+  private static final double TARGET_DUTYCYCLE = 1.0;
 
   public IntakeSubsystem() {
     // TODO: check with mech if motor on canivore or roborio
@@ -54,7 +54,7 @@ public class IntakeSubsystem extends SubsystemBase {
   public Command startIntake() {
     return startEnd(
             () -> {
-              runIntake(TARGET_RPS);
+              runIntake(TARGET_DUTYCYCLE);
             },
             () -> {
               stopIntake();
@@ -62,8 +62,8 @@ public class IntakeSubsystem extends SubsystemBase {
         .withName("Run Intake");
   }
 
-  private void runIntake(double velocity) {
-    intakeMotor.setControl(velocityRequest.withVelocity(velocity));
+  private void runIntake(double dutycycle) {
+    intakeMotor.setControl(intakeMotorDutyCycle.withOutput(dutycycle));
   }
 
   private void stopIntake() {
