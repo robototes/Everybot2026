@@ -101,10 +101,14 @@ public class Controls {
       driverController.rightTrigger().whileTrue(s.intakeV2.startIntake()); // intake with 2 motors
     }
     if (s.intakeV3 != null) {
-      driverController.leftBumper().whileTrue(s.intakeV3.startIntake()); // intake with 2 motors again
+      driverController
+          .leftBumper()
+          .whileTrue(s.intakeV3.startIntake()); // intake with 2 motors again
     }
     if (s.claudeTake != null) {
-      driverController.leftTrigger().whileTrue(s.claudeTake.startIntake()); // claude made this trust
+      driverController
+          .leftTrigger()
+          .whileTrue(s.claudeTake.startIntake()); // claude made this trust
     }
     if (s.tristenTake != null) {
       driverController.a().whileTrue(s.tristenTake.startIntake());

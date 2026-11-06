@@ -23,11 +23,11 @@ public class Subsystems {
   public static class SubsystemConstants {
     public static final boolean DRIVEBASE_ENABLED = true;
     public static final boolean INTAKE_ENABLED = true;
-    public static final boolean FLYWHEELS_ENABLED = true;
+    public static final boolean FLYWHEELS_ENABLED = false;
     public static final boolean INTAKEV2_ENABLED = true;
     public static final boolean INTAKEV3_ENABLED = true;
-    public static final boolean CLAUDETAKE_ENABLED = true;
-    public static final boolean TRISTENTAKE_ENABLED = true;
+    public static final boolean CLAUDETAKE_ENABLED = false;
+    public static final boolean TRISTENTAKE_ENABLED = false;
   }
 
   public final CommandSwerveDrivetrain drivebaseSubsystem;
