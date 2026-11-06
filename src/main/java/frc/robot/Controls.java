@@ -106,6 +106,9 @@ public class Controls {
     if (s.claudeTake != null) {
       driverController.leftTrigger().whileTrue(s.claudeTake.startIntake()); // claude made this trust
     }
+    if (s.tristenTake != null) {
+      driverController.a().whileTrue(s.tristenTake.startIntake());
+    }
   }
 
   private void configureDrivebaseBindings() {
